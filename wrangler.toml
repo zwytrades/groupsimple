@@ -1,0 +1,8 @@
+# This fresh name keeps this deployment separate from previously created Workers.
+# You can change this name if Cloudflare says it is already taken in your account.
+name = "groupsimple-fresh-start"
+main = "worker/worker.js"
+compatibility_date = "2026-10-17"
+workers_dev = true
+
+# Add credentials in the Cloudflare dashboard as Secrets, not in this file.

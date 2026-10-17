@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#4b7f43">
+  <meta name="description" content="Browse memecoin communities, research groups, alpha callers, and crypto project servers on groupsimple.">
+  <link rel="icon" href="logo.png">
+  <title>groupsimple — find your people</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg:#fbfcfa; --surface:#fff; --surface-alt:#f3f7f1; --fg:#141a13; --muted:#5d695a;
+      --line:#dce5d9; --accent:#4b8748; --accent-strong:#346e35; --accent-soft:#e9f2e5;
+      --shadow:0 12px 36px rgba(36,70,31,.07); --bad:#b3261e;
+      --font:'Outfit','Avenir Next','Segoe UI',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+    }
+    :root[data-theme="dark"] {
+      color-scheme:dark; --bg:#0e120e; --surface:#151b14; --surface-alt:#1b2519; --fg:#eff5ed;
+      --muted:#a5b19e; --line:#2a3728; --accent:#8bc47f; --accent-strong:#9bd58d; --accent-soft:#1e2b1c;
+      --shadow:0 12px 36px rgba(0,0,0,.22); --bad:#ff9187;
+    }
+    @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0e120e;--surface:#151b14;--surface-alt:#1b2519;--fg:#eff5ed;--muted:#a5b19e;--line:#2a3728;--accent:#8bc47f;--accent-strong:#9bd58d;--accent-soft:#1e2b1c;--shadow:0 12px 36px rgba(0,0,0,.22);--bad:#ff9187}}
+    *{box-sizing:border-box} html{scroll-behavior:smooth;scroll-padding-top:88px}
+    body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 var(--font);padding:0 22px}
+    a{color:inherit} button,input,select,textarea{font:inherit} button,a{-webkit-tap-highlight-color:transparent}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+    .wrap{width:min(1220px,100%);margin-inline:auto}.mono{font-family:var(--mono)}
+    .eyebrow{font:500 11px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent-strong)}
+    header.top{position:sticky;top:0;z-index:20;margin-inline:-22px;padding:0 22px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+    .bar{height:70px;max-width:1320px;margin:auto;display:flex;align-items:center;gap:22px}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:22px;letter-spacing:-.035em;color:var(--accent-strong);white-space:nowrap}
+    .brand img{width:35px;height:35px;object-fit:cover;border-radius:50%}
+    nav{display:flex;gap:22px;margin-left:auto;align-items:center}nav a{text-decoration:none;color:var(--muted);font-weight:500;font-size:14px}nav a:hover{color:var(--fg)}
+    .header-actions{display:flex;align-items:center;gap:9px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border:1.5px solid var(--line);border-radius:999px;padding:11px 17px;background:var(--surface);color:var(--fg);font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;transition:transform .15s,border-color .15s,background .15s}
+    .btn:hover{transform:translateY(-1px);border-color:var(--accent)}.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}:root[data-theme="dark"] .btn.primary{color:#0e120e}
+    .btn.primary:hover{background:var(--accent-strong)}.btn.subtle{background:transparent}.btn.small{min-height:36px;padding:8px 13px;font-size:13px}.btn:disabled{opacity:.6;cursor:wait;transform:none}
+    .icon-btn{width:42px;height:42px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;background:var(--surface);color:var(--fg);cursor:pointer;font-size:18px}
+    .hero{padding:32px 0 22px}.hero-layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(270px,.95fr);gap:26px;align-items:center}
+    .hero h1{font-size:clamp(36px,4.3vw,58px);line-height:1.02;letter-spacing:-.055em;font-weight:700;margin:10px 0 12px;max-width:720px}.hero h1 em{font-style:normal;color:var(--accent-strong)}
+    .hero p{max-width:58ch;margin:0;color:var(--muted);font-size:17px}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .banner{overflow:hidden;border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:var(--shadow)}.banner img{display:block;width:100%;height:auto;max-height:218px;object-fit:cover}
+    .directory{margin:18px auto 0;padding:28px;border:1px solid var(--line);border-radius:26px;background:var(--surface);box-shadow:var(--shadow)}
+    .directory-heading{display:flex;gap:24px;align-items:flex-end;justify-content:space-between;margin-bottom:21px}.directory h2,.section h2{font-size:clamp(28px,3.2vw,40px);line-height:1.05;letter-spacing:-.04em;margin:6px 0 8px}.section-sub{color:var(--muted);margin:0;max-width:70ch}
+    .directory-total{white-space:nowrap;color:var(--muted);font:500 12px/1.3 var(--mono);padding:10px 13px;border:1px solid var(--line);border-radius:999px;background:var(--surface-alt)}
+    .searchbar{display:flex;gap:10px;margin:22px 0 14px}.searchbar input{flex:1;min-width:130px}
+    input,select,textarea{width:100%;border:1.5px solid var(--line);border-radius:13px;background:var(--bg);color:var(--fg);padding:13px 14px;outline:none}
+    input::placeholder,textarea::placeholder{color:var(--muted);opacity:.85}input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+    .filter-label{font:500 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:16px 0 9px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--muted);padding:8px 12px;font-size:12px;font-weight:500;cursor:pointer}
+    .chip:hover{border-color:var(--accent);color:var(--fg)}.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-strong)}
+    .server-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px;margin-top:22px}
+    .server-card{position:relative;display:flex;flex-direction:column;min-width:0;min-height:285px;border:1.5px solid var(--line);border-radius:20px;padding:22px;background:var(--surface);transition:border-color .15s,transform .15s,box-shadow .15s}
+    .server-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--accent) 48%,var(--line));box-shadow:var(--shadow)}.server-card.boosted{border-color:var(--accent);background:linear-gradient(145deg,var(--accent-soft),var(--surface) 58%)}
+    .card-top{display:flex;align-items:flex-start;gap:14px}.server-avatar{width:67px;height:67px;flex:none;border:1px solid var(--line);border-radius:18px;object-fit:cover;background:var(--accent-soft);display:grid;place-items:center;color:var(--accent-strong);font-size:26px;font-weight:700}
+    .server-title-wrap{min-width:0;flex:1}.server-title{font-size:22px;font-weight:700;letter-spacing:-.035em;line-height:1.2;margin:1px 0 8px;overflow-wrap:anywhere}.badges{display:flex;gap:6px;flex-wrap:wrap}.tag{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:7px;padding:4px 8px;color:var(--muted);background:var(--bg);font:500 10px/1.35 var(--mono);letter-spacing:.01em}.tag.boost-tag{border-color:var(--accent);background:var(--accent);color:#fff}
+    .server-desc{color:var(--muted);font-size:15px;line-height:1.58;white-space:pre-wrap;overflow-wrap:anywhere;margin:19px 0 20px;flex:1}.server-desc.empty-desc{font-style:italic;opacity:.8}
+    .card-bottom{border-top:1px solid var(--line);padding-top:15px;display:flex;justify-content:space-between;align-items:center;gap:12px}.platform{font-size:12px;color:var(--muted)}.join-link{min-height:39px}
+    .empty-state{grid-column:1/-1;border:1px dashed var(--line);border-radius:18px;padding:42px 20px;text-align:center;color:var(--muted);background:var(--surface-alt)}.empty-state strong{display:block;font-size:20px;color:var(--fg);margin-bottom:5px}
+    .directory-note{margin:16px 0 0;color:var(--muted);font-size:12px}.section{padding:62px 0;border-top:1px solid var(--line);margin-top:58px}.section-head{margin-bottom:24px}.section-head .section-sub{margin-top:10px}
+    .tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-top:23px}.tier{padding:23px;border:1.5px solid var(--line);border-radius:19px;background:var(--surface);display:flex;flex-direction:column;gap:5px}.tier.featured{border-color:var(--accent);background:var(--accent-soft)}.tier .len{font:500 10px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--accent-strong)}.tier h3{margin:8px 0 0;font-size:22px;letter-spacing:-.02em}.price{font:500 30px/1.15 var(--mono);margin:9px 0 4px}.price small{font:500 13px var(--font);color:var(--muted)}.tier p{color:var(--muted);font-size:14px;flex:1;margin:0 0 16px}
+    .submit-layout{display:grid;grid-template-columns:minmax(250px,.7fr) minmax(0,1.3fr);gap:28px;align-items:start}.login-card{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:25px}.login-card h3{font-size:23px;line-height:1.15;margin:4px 0 9px}.login-card p{color:var(--muted);font-size:14px;margin:0 0 19px}
+    .account-row{display:flex;align-items:center;gap:12px;margin:14px 0}.account-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-strong);font-weight:700}
+    form.req{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;padding:24px;border:1px solid var(--line);border-radius:20px;background:var(--surface)}form.req[hidden],.login-card[hidden]{display:none}form.req .full{grid-column:1/-1}label{display:block;color:var(--muted);font:500 10px/1.4 var(--mono);letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px}
+    textarea{min-height:110px;resize:vertical}.pfp-row{display:flex;align-items:center;gap:14px}.pfp-preview{width:68px;height:68px;flex:none;border:1px dashed var(--line);border-radius:16px;display:grid;place-items:center;background:var(--surface-alt) center/cover no-repeat;color:var(--muted);font-size:24px}
+    .help{font-size:12px;color:var(--muted);margin:7px 0 0}.status{padding:14px 16px;margin:18px 0 0;border:1px solid var(--line);border-radius:13px;background:var(--surface-alt);color:var(--muted);font-size:14px}.status[hidden]{display:none}.status.error{border-color:color-mix(in srgb,var(--bad) 50%,var(--line));color:var(--bad)}.status.success{border-color:var(--accent);color:var(--accent-strong)}
+    footer{border-top:1px solid var(--line);padding:26px 0 34px;display:flex;gap:14px 32px;align-items:center;justify-content:space-between;flex-wrap:wrap;color:var(--muted);font-size:12px}footer .brand{font-size:18px}footer .brand img{width:27px;height:27px}footer p{max-width:58ch;margin:0}
+    .hidden{display:none!important}.mobile-menu{display:none}
+    @media(max-width:900px){nav{gap:13px}.hero-layout{grid-template-columns:1fr .8fr}.directory{padding:22px}.server-grid{gap:12px}.server-card{padding:17px}.server-title{font-size:20px}.submit-layout{grid-template-columns:1fr}.tiers{gap:10px}.tier{padding:19px}}
+    @media(max-width:700px){body{padding:0 14px}header.top{margin-inline:-14px;padding:0 14px}.bar{height:64px;gap:10px}.brand{font-size:19px;gap:7px}.brand img{width:30px;height:30px}.header-actions{margin-left:auto;gap:6px}.header-actions .btn{padding:9px 12px;min-height:38px;font-size:12px}.header-actions #logoutBtn{display:none}nav{display:none}.hero{padding:24px 0 15px}.hero-layout{grid-template-columns:1fr;gap:17px}.hero h1{font-size:40px}.hero p{font-size:15px}.hero .banner{order:-1;max-height:145px}.banner img{max-height:145px;object-fit:cover}.directory{margin-top:14px;padding:17px;border-radius:20px}.directory-heading{align-items:flex-start;flex-direction:column;gap:10px}.directory h2,.section h2{font-size:30px}.directory-total{padding:7px 10px}.searchbar{margin-top:17px}.searchbar .btn{padding-inline:13px}.server-grid{grid-template-columns:1fr}.server-card{min-height:250px;padding:18px}.server-avatar{width:58px;height:58px;border-radius:15px}.server-title{font-size:21px}.server-desc{margin:16px 0 18px;font-size:14px}.section{padding:43px 0;margin-top:38px}.tiers{grid-template-columns:1fr}.tier{padding:21px}.submit-layout{gap:15px}form.req{grid-template-columns:1fr;padding:17px;gap:14px}form.req .full{grid-column:auto}.login-card{padding:20px}.account-row{flex-wrap:wrap}footer{align-items:flex-start;flex-direction:column}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="bar">
+      <a class="brand" href="#top" aria-label="groupsimple home"><img src="logo.png" alt="" width="35" height="35">groupsimple</a>
+      <nav aria-label="Main navigation"><a href="#directory">Servers</a><a href="#boost">Boost</a><a href="#submit">Submit a server</a></nav>
+      <div class="header-actions">
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch to dark mode" title="Change theme">◐</button>
+        <a class="btn subtle" id="loginBtn" href="#submit">Login with Discord</a>
+        <button class="btn subtle" id="logoutBtn" type="button" hidden>Log out</button>
+        <a class="btn primary" id="discordBtn" href="https://discord.com/app" target="_blank" rel="noopener noreferrer">Join Discord ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" id="top">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-layout">
+        <div>
+          <span class="eyebrow">Memecoin communities, in one place</span>
+          <h1 id="heroTitle">Find your next <em>alpha group.</em></h1>
+          <p>Browse crypto servers by network and focus, read what each community is about, and join the ones that fit you.</p>
+          <div class="hero-actions"><a class="btn primary" href="#directory">Explore servers ↓</a><a class="btn" href="#submit">List your server</a></div>
+        </div>
+        <div class="banner"><img src="banner.png" alt="groupsimple wordmark with memecoin characters and rocket" width="921" height="286"></div>
+      </div>
+    </section>
+
+    <section class="directory" id="directory" aria-labelledby="directoryTitle">
+      <div class="directory-heading">
+        <div><span class="eyebrow">The directory</span><h2 id="directoryTitle">Explore communities</h2><p class="section-sub">Big, readable listings with the server description right on the card.</p></div>
+        <div class="directory-total" id="totalCount">Loading servers…</div>
+      </div>
+      <div class="searchbar" role="search"><input id="searchInput" type="search" placeholder="Search server, network, or topic…" aria-label="Search servers"><button class="btn primary" id="clearSearch" type="button">Clear</button></div>
+      <div class="filter-label">Network</div><div class="chips" id="networkChips" role="group" aria-label="Filter by network"></div>
+      <div class="filter-label">Server type</div><div class="chips" id="typeChips" role="group" aria-label="Filter by server type"></div>
+      <div class="server-grid" id="serverGrid" aria-live="polite"><div class="empty-state"><strong>Loading communities</strong>Fetching the latest server listings…</div></div>
+      <p class="directory-note" id="directoryNote">Listings are for discovery only, not financial advice. Always do your own research.</p>
+    </section>
+
+    <section class="section" id="boost" aria-labelledby="boostTitle">
+      <div class="section-head"><span class="eyebrow">Get discovered</span><h2 id="boostTitle">Put your server up front.</h2><p class="section-sub">Boost requests are reviewed by the team. Confirm payment with a moderator before a paid boost is applied.</p></div>
+      <div class="tiers">
+        <article class="tier"><span class="len">24 hours</span><h3>Quick spike</h3><div class="price">0.15 <small>SOL</small></div><p>For a raid, launch, or short campaign.</p><button class="btn" type="button" data-tier="boost-24h">Request a boost</button></article>
+        <article class="tier featured"><span class="len">3 days · Popular</span><h3>Spotlight</h3><div class="price">0.35 <small>SOL</small></div><p>A highlighted spot for a full weekend of traffic.</p><button class="btn primary" type="button" data-tier="boost-3d">Request a boost</button></article>
+        <article class="tier"><span class="len">7 days</span><h3>Full week</h3><div class="price">0.75 <small>SOL</small></div><p>Keep your community highlighted for a week.</p><button class="btn" type="button" data-tier="boost-7d">Request a boost</button></article>
+      </div>
+    </section>
+
+    <section class="section" id="submit" aria-labelledby="submitTitle">
+      <div class="section-head"><span class="eyebrow">Grow the directory</span><h2 id="submitTitle">List your server.</h2><p class="section-sub">Sign in with Discord, send your server details, and our moderators will review the request in Discord. No Telegram or X handle needed—contact the team in our Discord instead.</p></div>
+      <div class="submit-layout">
+        <aside class="login-card" id="loginCard">
+          <span class="eyebrow">Discord login required</span><h3>Connect your Discord.</h3><p>Sign in so we can attach your Discord account to your submission and moderators can follow up safely.</p><a class="btn primary" id="loginCardBtn" href="#">Continue with Discord ↗</a>
+          <div class="status" id="loginStatus" hidden></div>
+        </aside>
+        <form class="req" id="reqForm" novalidate hidden>
+          <div><label for="fName">Server name *</label><input id="fName" name="name" type="text" maxlength="70" placeholder="e.g. Base Gems Chat" autocomplete="off" required></div>
+          <div><label for="fLink">Discord or Telegram invite *</label><input id="fLink" name="link" type="url" maxlength="400" placeholder="https://discord.gg/…" required></div>
+          <div><label for="fNet">Network *</label><select id="fNet" name="network"><option>Solana</option><option>Base</option><option>Ethereum</option><option>BNB Chain</option><option>Multichain</option></select></div>
+          <div><label for="fCat">Server type *</label><select id="fCat" name="type"></select></div>
+          <div class="full"><label for="fAbout">Server description *</label><textarea id="fAbout" name="about" maxlength="1000" rows="4" placeholder="What is this community about? What do members get?" required></textarea><p class="help">This description appears directly on your server card.</p></div>
+          <div class="full"><label for="fPfp">Server icon (optional)</label><div class="pfp-row"><div class="pfp-preview" id="pfpPreview" aria-hidden="true">+</div><div style="flex:1;min-width:0"><input id="fPfp" type="file" accept="image/png,image/jpeg,image/webp"><p class="help">Square-cropped and compressed before upload. PNG, JPG, or WebP.</p></div></div></div>
+          <div class="full"><label for="fType">Request type</label><select id="fType" name="request"><option value="list">Free listing</option><option value="boost-24h">Free listing + 24-hour boost (0.15 SOL)</option><option value="boost-3d">Free listing + 3-day boost (0.35 SOL)</option><option value="boost-7d">Free listing + 7-day boost (0.75 SOL)</option></select></div>
+          <div class="full" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true"><label for="fWebsite">Leave empty</label><input id="fWebsite" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+          <div class="full"><button class="btn primary" type="submit" id="submitBtn">Send for moderator review ↗</button><p class="help">Submitting does not automatically activate a paid boost. Wait for a moderator before sending payment.</p></div>
+        </form>
+      </div>
+      <div class="status" id="submitStatus" role="status" aria-live="polite" hidden></div>
+    </section>
+  </main>
+
+  <footer class="wrap"><a class="brand" href="#top"><img src="logo.png" alt="" width="27" height="27">groupsimple</a><p>Community discovery, not financial advice. Memecoins are risky; never invest more than you can afford to lose.</p><span>© 2026 groupsimple</span></footer>
+  <script src="config.js"></script>
+  <script>
+  (() => {
+    'use strict';
+    const CFG = window.GS_CONFIG || {};
+    const WORKER = String(CFG.workerUrl || '').replace(/\/+$/, '');
+    const DISCORD_INVITE = String(CFG.discordInvite || '').trim();
+    const NETWORKS = ['All networks', 'Solana', 'Base', 'Ethereum', 'BNB Chain', 'Multichain'];
+    const TYPES = ['All types','Alpha calls','New launches','Chart analysis','Wallet tracking','Research and DD','Airdrops and farming','Bots and tools','Beginners and learning','Meme culture','Project community','Raids and shilling','Dev and builders','News and updates','NFT'];
+    const $ = (id) => document.getElementById(id);
+    const state = { network: 'All networks', type: 'All types', query: '' };
+    let groups = [], currentUser = null, sessionToken = '', pfpData = '';
+
+    function esc(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function safeLink(value) {
+      try {
+        const url = new URL(String(value || ''));
+        if (url.protocol !== 'https:') return '';
+        const host = url.hostname.toLowerCase();
+        if (host === 'discord.gg' && /^\/[A-Za-z0-9_-]+\/?$/.test(url.pathname)) return url.toString();
+        if (['discord.com','www.discord.com','discordapp.com'].includes(host) && /^\/invite\/[A-Za-z0-9_-]+\/?$/.test(url.pathname)) return url.toString();
+        if (['t.me','www.t.me','telegram.me','www.telegram.me'].includes(host) && /^\/[A-Za-z0-9_+.-]+\/?$/.test(url.pathname)) return url.toString();
+      } catch (_) {}
+      return '';
+    }
+    function isBoosted(group) { return Boolean(group.boostedUntil && Date.parse(group.boostedUntil) > Date.now()); }
+    function showStatus(id, message, kind) {
+      const element = $(id); element.textContent = message; element.className = 'status' + (kind ? ' ' + kind : ''); element.hidden = false;
+    }
+    function hideStatus(id) { $(id).hidden = true; }
+
+    function setJoinDiscord() {
+      const button = $('discordBtn');
+      if (DISCORD_INVITE && safeLink(DISCORD_INVITE)) button.href = safeLink(DISCORD_INVITE);
+      else button.href = 'https://discord.com/app';
+      button.addEventListener('click', (event) => {
+        if (!DISCORD_INVITE || !safeLink(DISCORD_INVITE)) {
+          event.preventDefault();
+          showStatus('submitStatus', 'Add your real Discord invite URL to discordInvite in config.js to activate this button.', 'error');
+          $('submitStatus').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    }
+
+    function oauthUrl() { return WORKER ? WORKER + '/auth/login' : ''; }
+    function setLoginLinks() {
+      ['loginBtn','loginCardBtn'].forEach((id) => {
+        const link = $(id); link.href = oauthUrl() || '#submit';
+        link.addEventListener('click', (event) => {
+          if (!WORKER) { event.preventDefault(); showStatus('loginStatus', 'Set workerUrl in config.js to your deployed Cloudflare Worker URL.', 'error'); }
+        });
+      });
+    }
+
+    function consumeOAuthResult() {
+      if (!location.hash || location.hash.length < 2) return;
+      const params = new URLSearchParams(location.hash.slice(1));
+      const token = params.get('gs_session');
+      const error = params.get('gs_error');
+      if (token) {
+        try { sessionStorage.setItem('gs-session', token); } catch (_) {}
+      }
+      if (error) {
+        const readable = {
+          discord_authorization_cancelled: 'Discord login was cancelled.',
+          oauth_state_check_failed: 'Login security check failed. Please try again.',
+          missing_authorization_code: 'Discord did not return a login code. Please try again.',
+          discord_login_failed_check_worker_secrets: 'Discord login failed. Check the Worker OAuth settings and callback URL.'
+        };
+        showStatus('loginStatus', readable[error] || 'Discord login could not be completed. Please try again.', 'error');
+      }
+      if (token || error) history.replaceState(null, document.title, location.pathname + location.search);
+    }
+
+    function setAuthUI() {
+      const loggedIn = Boolean(currentUser);
+      $('loginCard').hidden = loggedIn;
+      $('reqForm').hidden = !loggedIn;
+      $('loginBtn').hidden = loggedIn;
+      $('logoutBtn').hidden = !loggedIn;
+      if (loggedIn) {
+        $('logoutBtn').textContent = (currentUser.globalName || currentUser.username || 'Discord user') + ' · Log out';
+        $('logoutBtn').title = 'Signed in with Discord. Click to log out.';
+      }
+    }
+
+    async function checkSession() {
+      try { sessionToken = sessionStorage.getItem('gs-session') || ''; } catch (_) { sessionToken = ''; }
+      if (!sessionToken || !WORKER) { setAuthUI(); return; }
+      try {
+        const response = await fetch(WORKER + '/auth/me', { headers: { Authorization: 'Bearer ' + sessionToken }, cache: 'no-store' });
+        if (!response.ok) throw new Error('expired');
+        const payload = await response.json(); currentUser = payload.user || null;
+        if (!currentUser) throw new Error('missing-user');
+        hideStatus('loginStatus');
+      } catch (_) {
+        try { sessionStorage.removeItem('gs-session'); } catch (x) {}
+        sessionToken = ''; currentUser = null;
+        if (location.hash.indexOf('gs_session') !== -1) showStatus('loginStatus', 'Your Discord session could not be verified. Please sign in again.', 'error');
+      }
+      setAuthUI();
+    }
+
+    $('logoutBtn').addEventListener('click', () => {
+      try { sessionStorage.removeItem('gs-session'); } catch (_) {}
+      sessionToken = ''; currentUser = null; setAuthUI();
+      showStatus('submitStatus', 'You have been logged out of groupsimple.', 'success');
+    });
+
+    function makeChips(id, values, key) {
+      const host = $(id); host.innerHTML = '';
+      values.forEach((label) => {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'chip';
+        b.textContent = label; b.setAttribute('aria-pressed', String(state[key] === label));
+        b.addEventListener('click', () => { state[key] = label; renderChips(); renderGroups(); });
+        host.appendChild(b);
+      });
+    }
+    function renderChips() {
+      makeChips('networkChips', NETWORKS, 'network');
+      makeChips('typeChips', TYPES, 'type');
+    }
+
+    function avatarMarkup(group) {
+      const pfp = /^pfp\/[\w.-]+$/.test(group.pfp || '') ? group.pfp : '';
+      const letter = esc((String(group.name || '?').trim().charAt(0) || '?').toUpperCase());
+      return pfp
+        ? `<img class="server-avatar" src="${esc(pfp)}" alt="${esc(group.name || 'Server')} icon" loading="lazy">`
+        : `<div class="server-avatar" aria-hidden="true">${letter}</div>`;
+    }
+
+    function renderGroups() {
+      const query = state.query.trim().toLowerCase();
+      const filtered = groups.filter((g) => {
+        const networkMatch = state.network === 'All networks' || g.network === state.network || g.network === 'Multichain';
+        const typeMatch = state.type === 'All types' || g.type === state.type;
+        const text = [g.name, g.desc, g.network, g.type, g.platform].join(' ').toLowerCase();
+        return networkMatch && typeMatch && (!query || text.includes(query));
+      }).sort((a,b) => (Number(isBoosted(b))-Number(isBoosted(a))) || String(b.added || '').localeCompare(String(a.added || '')));
+      $('totalCount').textContent = `${filtered.length} / ${groups.length} servers`;
+      const host = $('serverGrid');
+      if (!filtered.length) {
+        host.innerHTML = `<div class="empty-state"><strong>${groups.length ? 'No matching servers' : 'No servers listed yet'}</strong>${groups.length ? 'Try changing your search or filters.' : 'Be the first to submit a community for review.'}<div style="margin-top:14px"><a class="btn primary" href="#submit">${groups.length ? 'Submit your server' : 'List the first server'}</a></div></div>`;
+        return;
+      }
+      host.innerHTML = filtered.map((g) => {
+        const link = safeLink(g.link);
+        const desc = String(g.desc || '').trim();
+        const boosted = isBoosted(g);
+        return `<article class="server-card${boosted ? ' boosted' : ''}">
+          <div class="card-top">${avatarMarkup(g)}<div class="server-title-wrap">
+            ${boosted ? '<div style="margin-bottom:5px"><span class="tag boost-tag">✦ BOOSTED</span></div>' : ''}
+            <h3 class="server-title">${esc(g.name || 'Unnamed server')}</h3>
+            <div class="badges"><span class="tag">${esc(g.network || 'Multichain')}</span><span class="tag">${esc(g.type || 'Community')}</span></div>
+          </div></div>
+          <p class="server-desc${desc ? '' : ' empty-desc'}">${esc(desc || 'This server has not added a description yet.')}</p>
+          <div class="card-bottom"><span class="platform">${esc(g.platform || 'Discord')} community</span>${link ? `<a class="btn primary small join-link" href="${esc(link)}" target="_blank" rel="noopener noreferrer">Join server ↗</a>` : '<span class="tag">Invite unavailable</span>'}</div>
+        </article>`;
+      }).join('');
+      host.querySelectorAll('img.server-avatar').forEach((img) => {
+        img.addEventListener('error', () => {
+          const replacement = document.createElement('div'); replacement.className = 'server-avatar';
+          replacement.setAttribute('aria-hidden','true'); replacement.textContent = (img.alt || '?').replace(/ icon$/,'').charAt(0).toUpperCase() || '?'; img.replaceWith(replacement);
+        }, { once: true });
+      });
+    }
+
+    async function loadGroups() {
+      try {
+        const response = await fetch('groups.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Could not load directory.');
+        const data = await response.json(); groups = Array.isArray(data.groups) ? data.groups : [];
+        renderGroups();
+      } catch (_) {
+        $('totalCount').textContent = 'Directory unavailable';
+        $('serverGrid').innerHTML = '<div class="empty-state"><strong>Could not load the directory</strong>Refresh the page in a moment.</div>';
+      }
+    }
+
+    $('searchInput').addEventListener('input', () => { state.query = $('searchInput').value; renderGroups(); });
+    $('clearSearch').addEventListener('click', () => { $('searchInput').value = ''; state.query = ''; state.network = 'All networks'; state.type = 'All types'; renderChips(); renderGroups(); });
+
+    function fillTypes() {
+      TYPES.slice(1).forEach((type) => { const option = document.createElement('option'); option.value = type; option.textContent = type; $('fCat').appendChild(option); });
+    }
+    function resetPfp() { pfpData = ''; $('pfpPreview').style.backgroundImage = ''; $('pfpPreview').textContent = '+'; }
+    function compressImage(file) {
+      return new Promise((resolve,reject) => {
+        if (!file || !/^image\/(png|jpeg|webp)$/.test(file.type)) return reject(new Error('Choose a PNG, JPG, or WebP image.'));
+        if (file.size > 8 * 1024 * 1024) return reject(new Error('Choose an image smaller than 8 MB.'));
+        const objectUrl = URL.createObjectURL(file); const img = new Image();
+        img.onload = () => {
+          try {
+            const side = Math.min(img.naturalWidth, img.naturalHeight); const canvas = document.createElement('canvas'); canvas.width = canvas.height = 256;
+            const ctx = canvas.getContext('2d'); ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,256,256);
+            ctx.drawImage(img,(img.naturalWidth-side)/2,(img.naturalHeight-side)/2,side,side,0,0,256,256);
+            const data = canvas.toDataURL('image/jpeg',.86); URL.revokeObjectURL(objectUrl);
+            if (data.length > 600000) return reject(new Error('That image is too large after compression. Try a different image.'));
+            resolve(data);
+          } catch (_) { URL.revokeObjectURL(objectUrl); reject(new Error('That image could not be processed.')); }
+        };
+        img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error('That image could not be opened.')); };
+        img.src = objectUrl;
+      });
+    }
+    $('fPfp').addEventListener('change', async function() {
+      resetPfp(); hideStatus('submitStatus'); const file = this.files && this.files[0]; if (!file) return;
+      try { pfpData = await compressImage(file); $('pfpPreview').style.backgroundImage = `url("${pfpData}")`; $('pfpPreview').textContent = ''; }
+      catch (error) { showStatus('submitStatus', error.message, 'error'); this.value = ''; }
+    });
+
+    $('reqForm').addEventListener('submit', async (event) => {
+      event.preventDefault(); hideStatus('submitStatus');
+      if (!currentUser || !sessionToken) { showStatus('submitStatus','Sign in with Discord before submitting a server.','error'); setAuthUI(); return; }
+      const name = $('fName').value.trim(), link = $('fLink').value.trim(), about = $('fAbout').value.trim();
+      if (!name || !link || !about) return showStatus('submitStatus','Please fill out the server name, invite link, and description.','error');
+      if (!safeLink(link)) return showStatus('submitStatus','Use a valid HTTPS Discord or Telegram invite link.','error');
+      if (!WORKER) return showStatus('submitStatus','Set workerUrl in config.js to your Cloudflare Worker URL.','error');
+      const btn = $('submitBtn'); btn.disabled = true; btn.textContent = 'Sending to moderators…';
+      try {
+        const response = await fetch(WORKER + '/submit', {
+          method:'POST', headers:{'content-type':'application/json','authorization':'Bearer '+sessionToken},
+          body:JSON.stringify({name,link,network:$('fNet').value,type:$('fCat').value,request:$('fType').value,about,pfp:pfpData,website:$('fWebsite').value})
+        });
+        const result = await response.json().catch(() => ({}));
+        if (response.status === 401) {
+          try { sessionStorage.removeItem('gs-session'); } catch (_) {}
+          sessionToken = ''; currentUser = null; setAuthUI();
+          throw new Error('Your Discord session expired. Sign in again to submit this server.');
+        }
+        if (!response.ok) throw new Error(result.error || 'Could not send this listing.');
+        $('reqForm').reset(); resetPfp();
+        showStatus('submitStatus','Listing sent to moderators for review. For follow-up, join the groupsimple Discord and message the team. Paid boosts are only activated after payment is confirmed.','success');
+      } catch (error) { showStatus('submitStatus',error.message || 'Could not reach the Worker. Check your connection and try again.','error'); }
+      finally { btn.disabled = false; btn.textContent = 'Send for moderator review ↗'; }
+    });
+
+    document.querySelectorAll('[data-tier]').forEach((button) => button.addEventListener('click', () => {
+      $('fType').value = button.getAttribute('data-tier'); $('submit').scrollIntoView({behavior:'smooth'});
+      if (!currentUser) showStatus('loginStatus','Sign in with Discord to request a server listing or boost.','');
+      else setTimeout(() => $('fName').focus({preventScroll:true}),350);
+    }));
+
+    $('themeBtn').addEventListener('click', () => {
+      const root = document.documentElement; const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme',next); $('themeBtn').textContent = next === 'dark' ? '☼' : '◐';
+      $('themeBtn').setAttribute('aria-label',next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+      try { localStorage.setItem('gs-theme',next); } catch (_) {}
+    });
+    try { const saved = localStorage.getItem('gs-theme'); if (saved === 'light' || saved === 'dark') document.documentElement.setAttribute('data-theme',saved); } catch (_) {}
+    $('themeBtn').textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☼' : '◐';
+
+    setJoinDiscord(); setLoginLinks(); consumeOAuthResult(); fillTypes(); renderChips();
+    Promise.all([checkSession(), loadGroups()]);
+  })();
+  </script>
+</body>
+</html>
