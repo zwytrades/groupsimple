@@ -2,5 +2,5 @@
 // Never put bot tokens, OAuth client secrets, GitHub tokens, or other secrets here.
 window.GS_CONFIG = {
   workerUrl: "",
-  discordInvite: ""
+  discordInvite: "https://discord.com/invite/groupsimple"
 };
